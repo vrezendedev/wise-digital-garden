@@ -1,0 +1,17 @@
+@use "./base.scss";
+
+img {
+  display: block;
+  margin: 0 auto;
+}
+
+//Add as the Img class on index.html
+.right {
+  display: block;
+  float: right;
+  margin: 0 0 10px 10px;
+}
+
+p {
+  text-align: justify;
+}

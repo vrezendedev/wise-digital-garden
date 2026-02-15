@@ -30,11 +30,13 @@ export const left = [
       }
     },
   }),
-  Component.RecentNotes({
-    limit: 4,
-    title: "Recently Published",
-    filter: (f) => !f.filePath?.includes("index"),
-  }),
+  Component.DesktopOnly(
+    Component.RecentNotes({
+      limit: 4,
+      title: "Recently Published",
+      filter: (f) => !f.filePath?.includes("index"),
+    }),
+  ),
 ]
 
 // components shared across all pages

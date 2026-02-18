@@ -1,6 +1,6 @@
 ---
 title: About Time
-date: 2026-01-12
+date: 2026-01-21
 tags:
   - time
   - self growth

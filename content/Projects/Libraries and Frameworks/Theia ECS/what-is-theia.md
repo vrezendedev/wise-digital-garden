@@ -1,6 +1,6 @@
 ---
 title: What is Theia and Theia Extended?
-date: 2026-01-01
+date: 2026-01-21
 ---
 
 ### Disclaimer

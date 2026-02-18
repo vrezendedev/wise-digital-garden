@@ -1,6 +1,6 @@
 ---
 title: About Nostalgia
-date: 2026-01-05
+date: 2026-01-21
 tags:
   - nostalgia
   - game design

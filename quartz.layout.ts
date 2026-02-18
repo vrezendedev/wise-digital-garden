@@ -32,7 +32,7 @@ export const left = [
   }),
   Component.DesktopOnly(
     Component.RecentNotes({
-      limit: 4,
+      limit: 2,
       title: "Recently Published",
       filter: (f) => !f.filePath?.includes("index"),
     }),

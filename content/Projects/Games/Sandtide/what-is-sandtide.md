@@ -1,6 +1,6 @@
 ---
 title: What is Sandtide?
-date: 2026-01-01
+date: 2026-02-04
 tags:
   - sandtide
   - wise shepherd games

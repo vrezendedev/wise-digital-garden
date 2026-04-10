@@ -1,0 +1,254 @@
+<p>Theia exists for <a href="../../../Projects/Games/Sandtide/what-is-sandtide" class="internal alias" data-slug="Projects/Games/Sandtide/what-is-sandtide">Sandtide</a>. And while developing it, I’ve realized <strong>how wrong some stuff was…</strong> not performance-wise, but maintainability-wise. I understood Theia, but <span class="text-highlight">only because I created it</span>, and that’s a huge problem! A few times, with my colleague, I had to explain how to use it properly to avoid memory corruption errors and things alike, and honestly, <span class="text-highlight">that’s terrible</span>.</p>
+<p>A framework <strong>should explicitly bring its philosophy along with it</strong>, and Theia did it, but partially. I had good ideas while developing it, but it was far from perfect; actually, <span class="text-highlight">the framework wasn’t self-aware of its own mistakes</span>. What I’m trying to say, is that the framework itself wasn’t enforcing anything, it led to a certain way of development, but it wasn’t explicitly acknowledging its use to the developer. <span class="text-highlight">It’s not only about having good documentation, but the system must react to wrong inputs</span>.</p>
+<p>Performance is important, sure it is! But we need to address performance while being, simultaneously, explicit and constrained. And that’s what the new version of Theia is about… I’m still refining some edges before releasing it publicly, but I’ve come here to share the first benchmark results, comparing it to other awesome frameworks, all written in C#.</p>
+<p><strong>Theia’s new version is fully implemented in managed C# (that means no unsafe code)</strong>, has a considerable amount of test coverage, and will be available with all the features from the previous version and more interesting ones!</p>
+<p>I’ve decided to compile all the results and plot them on a graph, so it’s easier to visualize and digest them. I will release the result files along with Theia’s new version.</p>
+<p>It’s safe to say that, by analyzing the data, <strong>Theia’s new version is not only safer, as I promised, but fast!</strong> In my opinion (try to ignore the fact that I’m the one who developed it), based on the data, Theia is a viable ECS framework. Due to its archetype’s underlying implementation, which aims for lazy initialization for chunks, at high entity counts, structural changes when adding or removing components are a little bit costly, and queries that involve very high entity counts can be impacted a little bit due to pointer dereferencing.</p>
+<p>These weak spots are a tradeoff… these decisions allowed <strong>reduction of unused memory consumption, safer chunk access (especially for parallelization), unlimited component types, and other ins-and-outs.</strong> But no worries, Theia compensates its weaknesses a lot! As I like to point out, <span class="text-highlight">Theia is a fast-enough (and often, or sometimes, faster) ECS framework for your games!</span></p>
+
+
+<style>
+.w{padding: 16px}
+
+.cats{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.tvars{display:flex;gap:5px;margin-bottom:24px;}
+
+.cat, .tv{font-size:14px;padding:4px 11px;border: 0;border-radius: 8px; cursor:pointer; font-family: inherit; background: transparent; color: var(--darkgray);}
+.cat.on, .tv.on{background: var(--lightgray);color:var(--tertiary);}
+.cat:hover, .tv:hover{background:var(--lightgray)}
+
+.tv:disabled{opacity:.35;cursor:default}
+.tv:disabled:hover{background: transparent;}
+
+.sub{font-size:14px;color:var(--lightgray); align-self: center;}
+
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px; justify-content: center;}
+
+.li{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tertiary);cursor:pointer;padding:3px 8px;border-radius:8px;border: 0;user-select:none;background: var(--lightgray)}
+.li:hover,.li.off:hover{ color: var(--light);border-radius: 8px; background:var(--darkgray)}
+.li.off{background: transparent;}
+.li.na{opacity:.3;cursor:default;pointer-events:none;}
+.li.na:hover{background:var(--lightgray);color:var(--tertiary);}
+
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+.ins{font-size:14px;color: var(--darkgray);border-left:2px solid var(--secondary);padding:7px 11px;margin-top:10px;}
+</style>
+
+<div class="w">
+  <h2 style="margin-top: 0;">Interactive ECS Framework Benchmark Dashboard. </h2>
+
+  <div class="cats" id="cats">
+    <button class="cat on" data-c="0">Query (Exclusive)</button>
+    <button class="cat" data-c="1">Query (Cross-Archetype)</button>
+    <button class="cat" data-c="2">Create Entity</button>
+    <button class="cat" data-c="3">Create Entity (Deferred)</button>
+    <button class="cat" data-c="4">Destroy Entity</button>
+    <button class="cat" data-c="5">Destroy Entity (Deferred)</button>
+    <button class="cat" data-c="6">Add component</button>
+    <button class="cat" data-c="7">Add component (Deferred)</button>
+    <button class="cat" data-c="8">Remove component</button>
+    <button class="cat" data-c="9">Remove component (Deferred)</button>
+    <button class="cat" data-c="10">Get component</button>
+    <button class="cat" data-c="11">Set component</button>
+  </div>
+
+  <div class="tvars" id="tvars">
+    <button class="tv on" data-t="0">T1</button>
+    <button class="tv" data-t="1">T3</button>
+    <button class="tv" data-t="2">T5</button>
+    <div class="sub" id="sub"></div>
+  </div>
+
+  <div style="position:relative;width:100%;height:300px; margin-top: 12px; margin-bottom: 12px;">
+    <canvas id="ch" role="img" aria-label="ECS Framework Performance Comparison Line Chart">Select a category to view benchmark results.</canvas>
+  </div>
+
+  <div class="leg" id="leg">
+    <div class="li" data-i="0"><div class="ld" style="background:#534AB7"></div>Theia</div>
+    <div class="li" data-i="1"><div class="ld" style="background:#1D9E75"></div>Friflo</div>
+    <div class="li" data-i="2"><div class="ld" style="background:#378ADD"></div>Frent</div>
+    <div class="li" data-i="3"><div class="ld" style="background:#ff1e69"></div>EntitiesDb</div>
+    <div class="li" data-i="4"><div class="ld" style="background:#888780"></div>Arch</div>
+    <div class="li" data-i="5"><div class="ld" style="background:#D85A30"></div>Fennecs</div>
+  </div>
+  <div class="ins" id="ins"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const FW=[
+  {n:'Theia',    c:'#534AB7'},
+  {n:'Friflo',   c:'#1D9E75'},
+  {n:'Frent',    c:'#378ADD'},
+  {n:'EntitiesDb',c:'#ff1e69'},
+  {n:'Arch',     c:'#888780'},
+  {n:'Fennecs',  c:'#D85A30'},
+];
+const L=['16','256','512','1k','4k','8k','16k','32k'];
+const NA=null;
+const visible=[true,true,true,true,true,true];
+
+const DATA={
+  0:{label:'Query (Exclusive)',t:[
+    {sub:'Exclusive Query T1 - μs per entity count (lower = better)',ins:'Theia leads at all sizes; gap widens above 1k entities. EntitiesDb catches up at 32k. Fennecs is 3-5× slower throughout.',rows:[[1.275,5.423,9.767,19.827,22.515,23.628,29.293,37.850],[2.752,7.639,12.994,25.244,27.904,33.030,42.664,61.203],[1.869,9.147,17.661,33.952,39.150,45.479,57.280,81.580],[2.145,7.785,13.268,25.200,26.658,29.200,31.023,37.445],[4.351,9.659,14.831,26.672,28.380,31.086,37.793,54.764],[6.194,12.207,22.679,39.424,49.523,58.000,82.371,116.979]]},
+    {sub:'Exclusive Query T3 - μs per entity count (lower = better)',ins:'Theia remains 1st up to 4k entities. Beyond 8k, it trails Friflo and Arch slightly. Frent degrades sharply at 512+.',rows:[[1.451,6.356,11.730,23.138,27.075,31.242,37.714,52.462],[3.044,8.874,15.332,28.565,33.475,37.221,47.669,68.547],[2.497,15.214,32.697,57.414,68.992,91.607,87.071,122.727],[2.391,12.764,15.921,30.333,34.831,37.071,44.060,57.258],[5.073,10.627,16.959,30.333,33.257,37.707,50.216,74.439],[7.769,17.015,44.012,52.790,100.491,72.685,88.309,235.485]]},
+    {sub:'Exclusive Query T5 - μs per entity count (lower = better)',ins:'Theia leads strongly at small counts. At 16k-32k, Friflo, EntitiesDb and Arch pull ahead.',rows:[[1.648,6.385,13.505,26.874,39.128,54.733,94.971,167.133],[3.259,9.350,16.721,31.679,38.992,49.686,71.369,115.023],[3.342,26.165,57.530,115.191,119.320,128.463,141.508,179.379],[2.828,14.507,19.413,36.640,46.457,56.100,63.192,106.179],[5.041,11.642,18.631,32.463,40.064,50.486,70.971,117.564],[9.921,37.928,67.985,163.386,192.987,237.673,203.546,309.006]]},
+  ]},
+  1:{label:'Query (Cross-Archetype)',t:[
+    {sub:'Cross-Archetype Query T1 - μs (lower = better)',ins:'Theia leads by a wide margin at T1. EntitiesDb is competitive at large counts. Fennecs is significantly slower.',rows:[[1.423,4.619,10.000,19.868,21.758,23.173,27.135,35.815],[2.987,8.197,13.350,24.975,27.747,33.731,43.360,61.969],[1.854,9.308,17.561,34.249,39.523,46.023,59.915,83.100],[2.518,8.150,13.773,25.648,27.379,29.893,31.493,37.767],[4.932,10.417,15.811,28.433,28.908,31.029,37.074,53.545],[7.168,13.460,23.453,43.966,88.386,82.373,89.923,130.927]]},
+    {sub:'Cross-Archetype Query T3 - μs (lower = better)',ins:'Theia leads up to 4k entities. Above 8k the cluster tightens; Frent degrades noticeably.',rows:[[1.636,6.543,11.579,23.005,30.842,42.431,63.597,109.477],[3.397,9.397,15.616,28.985,33.100,38.653,47.621,67.557],[2.862,15.347,30.643,68.694,76.147,73.400,101.607,126.760],[3.018,13.279,18.335,32.387,36.381,38.650,45.193,57.123],[5.591,11.799,17.896,29.885,34.933,38.386,53.385,76.452],[9.906,19.573,50.234,93.189,169.319,237.562,141.442,271.267]]},
+    {sub:'Cross-Archetype Query T5 - μs (lower = better)',ins:'Theia leads at small counts. At 32k with T5, EntitiesDb (95μs) and Friflo (114μs) are faster than Theia (153μs).',rows:[[1.907,7.675,13.874,27.242,38.992,55.407,87.729,153.120],[3.584,9.543,17.117,32.525,40.092,51.071,71.850,114.200],[3.991,22.969,54.565,111.873,76.560,115.185,138.053,210.317],[3.498,17.565,78.868,37.734,43.615,53.300,65.160,95.515],[5.970,12.608,18.944,34.443,41.454,52.150,72.188,118.710],[13.372,25.221,82.165,146.980,332.973,107.028,88.624,161.211]]},
+  ]},
+  2:{label:'Create Entity',t:[
+    {sub:'Create Entity T1 - μs (lower = better)',ins:'Frent leads at small counts. Theia takes the lead at 8k+. Friflo degrades severely at large counts.',rows:[[10.248,32.721,74.922,134.146,215.458,264.977,301.142,680.178],[11.694,61.208,145.804,310.131,884.328,1246.492,1590.819,6412.040],[4.001,22.058,46.485,90.722,175.173,303.038,539.393,1053.227],[10.228,54.483,104.468,262.589,731.492,1459.000,2572.655,2990.893],[21.324,88.677,127.645,245.648,888.700,1870.517,3396.850,1263.740],[68.441,768.438,1605.677,2947.606,10651.733,4064.898,4149.028,8609.029]]},
+    {sub:'Create Entity T3 - μs (lower = better)',ins:'Theia and Frent share the lead at small counts. Theia pulls clearly ahead from 4k+.',rows:[[11.054,41.031,80.556,174.767,197.419,260.156,417.475,793.962],[12.115,63.723,148.369,313.905,899.407,1330.244,1569.151,6711.350],[5.820,37.726,70.943,140.930,276.751,416.512,702.967,1663.473],[11.043,56.721,109.829,287.853,880.764,1574.359,2553.025,3177.466],[15.470,89.046,144.405,290.119,1188.062,2091.771,4445.279,8450.292],[353.329,2898.407,4104.099,2449.228,3971.717,7933.052,15244.330,31201.746]]},
+    {sub:'Create Entity T5 - μs (lower = better)',ins:'Theia is fastest at virtually all entity counts for T5. Adding more components amplifies Theia\'s advantage.',rows:[[10.548,48.192,109.479,278.189,303.847,394.632,559.721,882.262],[17.077,67.767,167.509,315.188,809.013,1227.618,1558.786,6002.661],[7.633,53.896,95.931,176.989,317.826,504.544,737.046,1990.642],[11.368,64.958,118.166,301.361,1030.806,1930.993,2523.725,7313.448],[17.219,95.598,182.202,343.469,1373.842,2641.033,1909.883,1492.627],[435.685,4724.488,3061.828,2251.416,8294.454,15569.862,31526.367,62086.750]]},
+  ]},
+3:{label:'Create Entity (Deferred)',noFennecs:true,t:[
+    {sub:'Create Entity Deferred T1 - μs (lower = better)',ins:'Theia is the fastest deferred creator at all sizes, up to 3-4× faster than Friflo and Frent.',rows:[[12.926,51.977,101.825,248.209,305.253,502.123,817.547,1513.433],[19.405,115.350,292.245,512.949,1195.584,1593.398,3393.662,4022.681],[16.672,175.183,274.401,313.810,761.112,1037.367,3238.721,2640.925],[18.078,231.147,380.974,642.618,2434.727,3608.230,5699.624,3366.172],[41.127,281.200,507.400,1022.852,2265.002,3301.601,7054.580,8229.583],[NA,NA,NA,NA,NA,NA,NA,NA]]},
+    {sub:'Create Entity Deferred T3 - μs (lower = better)',ins:'Theia dominates, consistently 2-8× faster. At 32k, Theia takes 1.7ms while Arch needs 10.4ms.',rows:[[14.613,62.238,116.300,278.462,397.373,571.912,915.253,1747.206],[26.501,246.822,399.229,725.111,1311.048,2311.610,5679.573,5356.808],[33.914,394.058,539.352,773.122,2667.542,5355.800,3085.200,6468.796],[23.504,329.272,538.575,923.109,3529.308,3779.789,6604.231,6534.982],[47.345,398.682,735.831,1452.192,4294.920,6793.770,5244.355,10400.825],[NA,NA,NA,NA,NA,NA,NA,NA]]},
+    {sub:'Create Entity Deferred T5 - μs (lower = better)',ins:'Theia leads by an even larger margin with 5 components. At 32k, Theia (2ms) is ~6× faster than Friflo (12ms).',rows:[[14.372,75.292,132.562,298.113,478.836,637.532,1144.168,1985.465],[31.840,306.372,516.612,927.814,1878.243,2465.948,4616.844,12236.940],[61.564,593.415,921.411,1531.918,5285.507,2408.793,5109.688,10136.055],[30.834,376.396,658.348,1240.830,3702.389,5641.701,4586.831,7668.500],[56.736,513.665,942.005,1843.914,4293.634,6004.755,7066.145,14020.847],[NA,NA,NA,NA,NA,NA,NA,NA]]},
+  ]},
+  4:{label:'Destroy Entity',t:[
+    {sub:'Destroy Entity T1 - μs (lower = better)',ins:'Theia is top-2 at all sizes and leads from 4k entities onward.',rows:[[3.868,33.172,61.775,120.609,155.993,210.493,324.950,544.613],[3.353,23.439,61.977,119.850,304.284,536.273,1010.523,552.056],[4.055,37.452,71.622,138.499,358.565,658.577,1289.321,2824.713],[4.388,41.200,143.866,166.463,428.514,821.771,1555.000,2768.831],[4.781,53.000,104.165,202.810,261.757,351.789,540.992,850.936],[7.686,76.793,148.649,286.443,616.608,462.961,456.633,886.332]]},
+    {sub:'Destroy Entity T3 - μs (lower = better)',ins:'Theia and Friflo lead for T3. At 32k, EntitiesDb and Theia lead.',rows:[[4.134,40.126,140.008,139.416,196.607,261.485,395.660,648.914],[3.656,29.742,74.868,140.762,371.095,618.040,1224.423,2156.807],[5.072,54.175,103.868,203.802,616.894,1166.507,2241.479,4290.757],[4.998,59.050,115.380,217.260,662.331,1144.533,2141.400,761.564],[4.986,62.570,116.100,227.767,312.373,445.013,679.207,1114.857],[11.571,131.443,258.036,337.177,368.191,329.331,649.977,1301.267]]},
+    {sub:'Destroy Entity T5 - μs (lower = better)',ins:'Theia and Friflo lead at T5. Theia is the best at small counts and ties with EntitiesDb at 32k.',rows:[[4.639,47.518,90.507,178.583,236.536,331.857,534.727,942.469],[4.281,48.031,88.480,168.716,438.518,747.685,1335.521,2321.693],[6.169,70.319,133.546,265.493,838.969,1585.397,3131.210,6060.120],[5.872,111.108,133.308,252.886,727.542,1458.080,2629.873,938.268],[6.110,66.978,141.604,268.910,362.313,516.507,806.171,1339.627],[15.129,195.943,290.425,257.252,225.947,442.233,838.876,1741.431]]},
+  ]},
+  5:{label:'Destroy Entity (Deferred)',noFennecs:true,t:[
+    {sub:'Destroy Entity Deferred T1 - μs (lower = better)',ins:'Theia leads at all sizes. At 32k, Theia (884μs) versus Friflo (1940μs) versus Arch (3171μs).',rows:[[4.850,38.862,124.437,142.659,210.346,288.808,507.757,884.350],[5.500,32.136,79.968,148.123,354.614,583.587,1049.300,1940.160],[5.132,38.688,76.608,153.748,436.300,806.343,1439.690,3014.879],[6.402,58.529,194.670,220.433,762.707,1385.237,2637.821,5309.964],[17.585,111.601,175.848,322.336,658.377,964.069,1998.314,3171.254],[NA,NA,NA,NA,NA,NA,NA,NA]]},
+    {sub:'Destroy Entity Deferred T3 - μs (lower = better)',ins:'Theia leads at all sizes. At 32k, Theia (1010μs) is 2.3× faster than Friflo and 4× faster than Frent.',rows:[[5.311,46.930,181.661,179.822,254.979,341.157,587.446,1009.586],[5.924,51.931,92.623,178.602,421.950,681.086,1252.547,2273.758],[6.154,60.576,110.614,210.718,649.856,1223.807,2254.050,4609.441],[7.667,140.470,189.092,268.671,905.121,1773.253,3378.957,1847.781],[14.870,114.078,179.462,314.783,527.993,1209.775,2121.600,3922.881],[NA,NA,NA,NA,NA,NA,NA,NA]]},
+    {sub:'Destroy Entity Deferred T5 - μs (lower = better)',ins:'Theia stays on top. At 32k, Frent (1070μs) is competitive versus Theia (1285μs).',rows:[[5.566,56.984,106.868,197.117,308.729,423.614,739.713,1284.500],[6.314,46.467,103.653,194.957,480.194,778.980,1344.286,2363.757],[7.305,77.717,140.496,282.326,842.107,1704.813,3163.073,1069.644],[8.577,131.794,161.686,304.636,1022.864,2000.021,3992.292,1798.209],[14.318,119.933,172.203,321.545,706.350,1287.235,2308.750,4114.362],[NA,NA,NA,NA,NA,NA,NA,NA]]},
+  ]},
+  6:{label:'Add Component',t:[
+    {sub:'Add Component T1 - μs (lower = better)',ins:'Theia leads from 256 to 8k entities. At 32k it falls to 5th. EntitiesDb scales best.',rows:[[18.018,71.344,268.854,278.692,888.764,1765.885,3494.852,6830.943],[14.924,195.569,207.113,399.950,1454.373,2878.823,5767.033,2822.757],[9.467,84.062,169.214,296.757,787.968,1499.638,2816.757,1433.636],[15.910,270.262,332.098,548.067,2007.357,4105.360,8357.854,1808.000],[26.740,184.457,362.357,746.993,1967.587,5119.200,3290.810,2017.506],[86.424,985.460,1923.069,3744.921,1365.558,2896.246,4984.808,10682.153]]},
+    {sub:'Add Component T3 - μs (lower = better)',ins:'Frent and Theia lead at small sizes. At 32k, Friflo and Frent beat Theia.',rows:[[16.609,190.656,260.132,363.558,1224.108,2459.895,4920.513,9991.608],[16.030,221.812,257.029,512.431,1837.433,3796.233,3728.818,1346.543],[12.767,105.872,200.605,383.923,1156.521,2093.558,4282.043,1779.744],[18.905,290.280,356.639,683.903,2564.992,4920.638,1724.571,4904.400],[40.941,285.915,534.750,1031.812,3848.131,7361.600,1742.993,3406.734],[122.260,1448.700,1347.739,1577.726,1921.730,3629.768,7110.933,14598.746]]},
+    {sub:'Add Component T5 - μs (lower = better)',ins:'At 32k with T5, Friflo (1497μs) and Theia (2014μs) are competitive.',rows:[[17.463,228.330,330.096,474.331,1617.193,3221.357,6196.247,2013.871],[19.665,250.469,306.683,606.800,2201.160,4391.554,8682.827,1497.367],[14.850,137.436,259.803,516.034,1538.383,2864.892,5822.925,2033.764],[18.871,310.696,401.300,756.745,3013.450,5803.913,4363.148,2709.145],[39.157,346.522,683.879,1410.254,2875.873,3918.897,2522.162,4671.415],[146.731,1804.514,993.463,774.681,2351.526,4365.959,9063.211,18789.013]]},
+  ]},
+  7:{label:'Add component (Deferred)',noFennecs:true,onlyT3:true,t:[
+    null,
+    {sub:'Add Component Deferred T3 - μs (lower = better)',ins:'Theia leads at small counts (up to 1k). At 16k, Friflo (1399μs) overtakes Theia (5216μs). At 32k, Friflo and Frent beat Theia.',rows:[[16.785,237.460,361.738,444.650,1394.587,2777.853,5216.069,10643.829],[22.163,262.774,280.424,575.455,1305.200,2202.213,1398.869,2796.728],[18.498,173.982,260.777,497.003,1402.495,2580.950,4869.070,2585.957],[21.434,340.633,461.692,834.159,3173.693,6085.700,5221.663,8660.255],[52.563,424.608,771.054,1715.057,6447.180,11133.879,24454.802,219961.785],[NA,NA,NA,NA,NA,NA,NA,NA]]},
+    null,
+  ]},
+  8:{label:'Remove Component',t:[
+    {sub:'Remove Component T2 - μs (lower = better)',ins:'Theia leads from 256 to 8k entities. At 32k it falls to 5th (5523μs versus Frent 1375μs).',rows:[[11.407,52.123,143.577,285.583,751.155,1358.676,2768.591,5523.387],[13.799,90.938,274.919,387.259,1386.080,2718.043,5406.547,2724.381],[9.070,82.878,162.186,297.658,989.275,1844.036,3623.407,1374.687],[15.602,233.069,361.667,549.197,2151.160,3975.797,8192.693,1751.725],[34.951,218.550,415.875,784.230,3081.283,6032.121,1173.081,2231.848],[77.627,848.686,1629.386,683.301,1068.658,1911.692,3891.844,7049.114]]},
+    {sub:'Remove Component T3 - μs (lower = better)',ins:'Theia leads up to 8k. At 32k (6956μs) it falls behind Friflo (1119μs) and Frent (1564μs).',rows:[[11.899,72.941,222.692,308.665,903.729,1797.385,3407.938,6956.247],[14.720,154.319,216.869,426.926,1650.673,3039.736,627.431,1118.500],[10.671,134.971,179.261,357.514,1178.958,2287.353,4262.069,1563.988],[17.211,250.970,362.388,612.547,2362.167,4428.343,8990.964,2037.997],[37.889,263.689,487.654,954.671,3485.186,6964.942,1482.427,2945.967],[85.933,1066.643,2129.573,830.099,1334.154,2353.743,4450.480,9918.607]]},
+    {sub:'Remove Component T5 - μs (lower = better)',ins:'Theia leads at small-medium sizes; at 32k (9667μs) Friflo (1346μs) leads.',rows:[[13.726,98.448,269.984,357.923,1283.714,2728.867,4826.940,9666.627],[16.163,173.805,323.248,504.613,1936.780,3781.530,678.446,1345.547],[12.915,127.876,231.009,448.832,1650.503,3224.155,6257.473,1894.545],[18.932,265.158,425.275,712.633,2613.531,5286.336,2617.779,2400.585],[44.840,338.909,613.681,1244.817,4868.867,10587.836,2175.635,4247.681],[123.433,1485.108,778.960,1995.344,1776.745,3581.836,6962.511,14459.985]]},
+  ]},
+  9:{label:'Remove Component (Deferred)',noFennecs:true,onlyT3:true,t:[
+    null,
+    {sub:'Remove Component Deferred T3 - μs (lower = better)',ins:'Theia leads up to 8k entities. At 32k (7276μs) it falls behind Frent (2201μs), Friflo (2269μs) and EntitiesDb (2991μs).',rows:[[14.309,83.963,256.404,333.404,971.685,1925.729,3832.946,7276.493],[19.679,219.074,305.903,484.909,1203.543,2062.917,3784.150,2268.604],[14.931,116.579,235.326,454.116,1309.284,1132.116,4424.473,2200.609],[21.046,300.929,466.919,753.690,2684.486,4885.813,4915.096,2990.995],[58.534,616.562,1244.574,2346.534,7466.032,9619.492,23896.856,224593.516],[NA,NA,NA,NA,NA,NA,NA,NA]]},
+    null,
+  ]},
+  10:{label:'Get Component',onlyT1:true,t:[
+    {sub:'Get Component T1 - μs (lower = better)',ins:'Friflo is fastest. Theia is solid 2nd up to 8k, then joins a cluster with EntitiesDb.',rows:[[1.1653,9.5500,19.4208,39.0136,61.6769,89.0200,150.0286,269.0714],[0.6733,4.5571,9.5185,19.9312,32.2000,49.0333,81.2571,147.8714],[1.7546,15.8250,32.1400,62.7722,79.3933,110.3733,144.7000,233.9267],[1.6404,14.1857,28.5200,56.7071,68.1000,89.3867,127.2867,206.8214],[2.3368,23.5692,44.5206,85.8143,111.1929,138.8933,195.6429,312.4786],[7.7443,100.3429,196.8111,390.1462,970.3231,387.2960,699.7938,1273.9231]]},
+    null,null,
+  ]},
+  11:{label:'Set Component',onlyT1:true,t:[
+    {sub:'Set Component T1 - μs (lower = better)',ins:'Theia and Friflo nearly tied at small counts. Friflo degrades past 4k. EntitiesDb leads at 4k and 32k.',rows:[[1.148,9.573,20.165,38.245,61.000,88.847,146.623,262.714],[1.151,8.635,19.639,38.341,120.873,228.033,430.780,863.621],[5.300,39.977,95.960,189.829,565.857,1126.953,2247.443,4236.569],[1.329,9.714,20.715,41.081,56.367,82.220,123.547,206.747],[2.349,21.736,47.959,90.540,107.647,133.853,189.279,239.933],[8.774,103.607,208.754,391.067,216.776,364.350,680.792,1260.064]]},
+    null,null,
+  ]},
+};
+
+const FENNECS_IDX = 5;
+let catIdx=0,tIdx=0,chart=null;
+
+function buildChart(){
+  const d=DATA[catIdx];
+  const tv=d.t[tIdx];
+  if(!tv)return;
+
+  document.getElementById('sub').textContent=tv.sub;
+  document.getElementById('ins').textContent=tv.ins;
+
+  const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+  const gc=isDark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
+  const tc=isDark?'#999':'#666';
+
+  const datasets=tv.rows.map((r,i)=>({
+    label:FW[i].n,data:r,
+    borderColor:FW[i].c,backgroundColor:FW[i].c+'22',
+    borderWidth:i===0?2.5:1.5,
+    pointRadius:i===0?4:2.5,
+    hidden:!visible[i],
+    spanGaps:true,tension:0.3,fill:false,
+    borderDash:i===0?[]:[4,3],
+  }));
+
+  if(chart)chart.destroy();
+  chart=new Chart(document.getElementById('ch'),{
+    type:'line',data:{labels:L,datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y!=null?c.parsed.y.toFixed(1)+' μs':'N/A'}`}}},
+      scales:{
+        x:{grid:{color:gc},ticks:{color:tc,font:{size:11}}},
+        y:{grid:{color:gc},ticks:{color:tc,font:{size:11},callback:v=>v>=1000?(v/1000).toFixed(1)+'ms':v+'μs'}},
+      }
+    }
+  });
+}
+
+function syncLegendUI(){
+  const noFennecs = !!DATA[catIdx].noFennecs;
+  document.querySelectorAll('.li').forEach((el,i)=>{
+    const isNA = noFennecs && i === FENNECS_IDX;
+    el.classList.toggle('na', isNA);
+    if(!isNA) el.classList.toggle('off', !visible[i]);
+    else el.classList.remove('off');
+  });
+}
+
+function setTabs(cIdx){
+  const d=DATA[cIdx];
+  const btns=document.querySelectorAll('.tv');
+  btns.forEach((b,i)=>{
+    const disabled=
+      (d.onlyT1&&i!==0)||
+      (d.onlyT3&&i!==1)||
+      (d.t[i]==null);
+    b.disabled=disabled;
+    if(disabled&&tIdx===i) tIdx=d.onlyT3?1:0;
+  });
+  btns.forEach(b=>b.classList.toggle('on',parseInt(b.dataset.t)===tIdx&&!b.disabled));
+}
+
+document.getElementById('cats').addEventListener('click',e=>{
+  const b=e.target.closest('.cat');if(!b)return;
+  document.querySelectorAll('.cat').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  catIdx=parseInt(b.dataset.c);
+  if(DATA[catIdx].onlyT3)tIdx=1;
+  else if(DATA[catIdx].onlyT1)tIdx=0;
+  setTabs(catIdx);
+  syncLegendUI();
+  buildChart();
+});
+
+document.getElementById('tvars').addEventListener('click',e=>{
+  const b=e.target.closest('.tv');if(!b||b.disabled)return;
+  document.querySelectorAll('.tv').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  tIdx=parseInt(b.dataset.t);
+  buildChart();
+});
+
+document.getElementById('leg').addEventListener('click',e=>{
+  const el=e.target.closest('.li');
+  if(!el||el.classList.contains('na'))return;
+  const i=parseInt(el.dataset.i);
+  visible[i]=!visible[i];
+  syncLegendUI();
+  if(chart){
+    chart.data.datasets[i].hidden=!visible[i];
+    chart.update();
+  }
+});
+
+setTabs(0);
+syncLegendUI();
+buildChart();
+</script>
+
+
+</article>

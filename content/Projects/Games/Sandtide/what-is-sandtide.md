@@ -52,7 +52,7 @@ After each match, players earn match points based on their performance, includin
 
 ### Technicalities
 
-Sandtide is built on top of [MonoGame](https://monogame.net/) and an in-house, free and open-source ECS framework called [[what-is-theia|Theia ECS]]. Due to the level of flexibility and control we wanted over our source code, we chose not to use a game engine and instead followed a more old-school development approach.
+Sandtide is built on top of [MonoGame](https://monogame.net/) and an in-house, free and open-source ECS framework called Theia ECS. Due to the level of flexibility and control we wanted over our source code, we chose not to use a game engine and instead followed a more old-school development approach.
 
 Since this is written by a programmer, I strongly believe that combining different programming paradigms like [object-oriented](https://en.wikipedia.org/wiki/Object-oriented_programming), [functional](https://en.wikipedia.org/wiki/Functional_programming), and [procedural](https://en.wikipedia.org/wiki/Procedural_programming), along with design approaches such as [data-oriented design](https://en.wikipedia.org/wiki/Data-oriented_design), is the best way to build a solid, maintainable, scalable, and high-performance codebase.
 

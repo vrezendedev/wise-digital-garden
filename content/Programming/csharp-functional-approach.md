@@ -8,6 +8,10 @@ tags:
   - game development
 ---
 
+### Disclaimer
+
+This article uses examples from an old and obsolete version of Theia ECS; nonetheless, the topics discussed here are still valid and worthy of analysis.
+
 ### Introduction
 
 **In game development**, **mutability** is something that **can’t be avoided and definitely shouldn’t be**. Fully immutable entities are often counterproductive in real-time game loops, but we should use immutable data where it fits nicely. But functional programming isn’t only about immutable state; it’s much more than that.
@@ -20,7 +24,7 @@ So, I’ll try to point out, using a few examples, **how we can adopt a more fun
 
 ### Functional Programming and Entity-Component-System
 
-I can’t deny that I was constantly thinking about similarities between ECS and functional programming during the early-stage development of [[what-is-theia|Theia ECS]]; it definitely changed how I approached the public API.
+I can’t deny that I was constantly thinking about similarities between ECS and functional programming during the early-stage development of Theia (Obsolete Version); it definitely changed how I approached the public API.
 
 In ECS, **data is dumb** and has no manners, because it doesn’t know how to behave itself ~ba dum tss~. **Components are containers** of values and shouldn’t dictate behavior. Systems act through **queries, which act like higher-order functions**, to alter the states of these components (and that differs completely from the idea of immutability).
 
@@ -96,7 +100,7 @@ public static class WorldDrawer
 }
 ```
 
-When I was developing the **first version of [[what-is-theia|Theia Extended]]**, I considered creating systems as follows:
+When I was developing the **first version of Theia Extended (Obsolete Version)**, I considered creating systems as follows:
 
 ```csharp
 public abstract class Unit<TInitialize, TLoad, TUpdate, TDraw>
@@ -166,7 +170,7 @@ public class Bundle<TInitialize, TLoad, TUpdate, TDraw>
 }
 ```
 
-This is the **current implementation of Systems** in [[what-is-theia|Theia Extended]]. It provides ==minimal coupling== because systems no longer hold references to the world or enforce a lifecycle contract; instead, all required data and behavior are passed explicitly at the call site. It enables ==method chaining for explicit pipelines, independent and reusable functions, declarative execution order, encourages readonly immutable parameters, and treats behavior as first-class values==, as illustrated in the first example. **The method chaining is an aesthetic choice** and, in my opinion, enhances readability while making the pipeline flow more explicit.
+This is the **current implementation of Systems** in Theia Extended (Obsolete Version). It provides ==minimal coupling== because systems no longer hold references to the world or enforce a lifecycle contract; instead, all required data and behavior are passed explicitly at the call site. It enables ==method chaining for explicit pipelines, independent and reusable functions, declarative execution order, encourages readonly immutable parameters, and treats behavior as first-class values==, as illustrated in the first example. **The method chaining is an aesthetic choice** and, in my opinion, enhances readability while making the pipeline flow more explicit.
 
 ### Being More Declarative: An Example with Theia ECS Queries
 
@@ -180,7 +184,7 @@ dto.World.ExecuteQueryAsProspective(
 );
 ```
 
-Declarative programming means describing the desired outcome rather than the intermediate steps required to achieve it. In [[what-is-theia|Theia ECS]], queries require **filtering** and **behavioral inputs** while ==explicitly stating their intent== through `ExecuteQueryAsCreational`, `ExecuteQueryAsProspective`, and `ExecuteHermitQuery`.
+Declarative programming means describing the desired outcome rather than the intermediate steps required to achieve it. In Theia (Obsolete Version), queries require **filtering** and **behavioral inputs** while ==explicitly stating their intent== through `ExecuteQueryAsCreational`, `ExecuteQueryAsProspective`, and `ExecuteHermitQuery`.
 
 These queries allow the developer to **describe the shape of the data to be transformed**. They implicitly act as ==data contracts==: there are no hidden dependencies, since the queries declare the exact coupling surface as the set of data the lambda depends on.
 
@@ -196,7 +200,7 @@ There are many ways to achieve global shared data, for example, through static c
 
 It’s undeniable how dangerous these can become if mutable. Global mutable state implies that side effects are spread all over the source code. But should we avoid global state altogether?
 
-From a more mechanics/feature-oriented perspective, in games, that’s pretty hard to do. For example, in [[what-is-sandtide|Sandtide]], the player has both global and local resources, and many entities can mutate those global resources. Therefore, we need a way to store these resources globally. For that, [[what-is-theia|Theia Extended]] provides [`Atom<TValue>`](https://github.com/vrezendedev/TheiaECS?tab=readme-ov-file#-singleton-components) for unmanaged values and [`DataTable<TKey, TValue>`](https://github.com/vrezendedev/TheiaECS?tab=readme-ov-file#-data-tables) for managed values.
+From a more mechanics/feature-oriented perspective, in games, that’s pretty hard to do. For example, in [[what-is-sandtide|Sandtide]], the player has both global and local resources, and many entities can mutate those global resources. Therefore, we need a way to store these resources globally. For that, Theia Extended (Obsolete Version) provides `Atom<TValue>`for unmanaged values and `DataTable<TKey, TValue>` for managed values.
 
 But what about from a program’s architectural perspective? Should systems mutate every shared dependency? The short answer is ==usually no==. And that’s where immutability shines. Not every dependency needs to be mutable, but not all immutable data is a compile-time constant known ahead of time. In C#, there are multiple ways to achieve immutability; for example, you can use `readonly struct` or `record`.
 
@@ -222,7 +226,7 @@ But what does this have to do with global shared state? Immutability doesn’t e
 
 ==Games require performance==, and that’s something that **needs to be addressed early on**, not when bottlenecks start occurring. There is a lot of content out there pointing to the performance advantages of ECS and data-oriented design, but **understanding how the language works is mandatory to create these high-performance systems**.
 
-When creating [[what-is-theia|Theia ECS]], ==one of the key concerns was addressing the boxing and unboxing of unmanaged values, minimizing garbage collection hits, and ensuring cache-friendly data locality and layout, among other low-level considerations==. It’s hard to imagine a scenario where component immutability would fit nicely, performance-wise, in a context that would involve constant boxing and unboxing. If components were immutable, every time one would change, it wouldn’t actually mutate it in place, it would:
+When creating Theia (Obsolete Version), ==one of the key concerns was addressing the boxing and unboxing of unmanaged values, minimizing garbage collection hits, and ensuring cache-friendly data locality and layout, among other low-level considerations==. It’s hard to imagine a scenario where component immutability would fit nicely, performance-wise, in a context that would involve constant boxing and unboxing. If components were immutable, every time one would change, it wouldn’t actually mutate it in place, it would:
 
 1. Create a new component with the updated values;
 2. Replace the old one in the chunk;

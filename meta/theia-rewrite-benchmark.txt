@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head><title>... Theia Rewrite: Updated Benchmark Results</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&amp;family=Jost:ital,wght@0,400;0,600;1,400;1,600&amp;family=Consolas:wght@400;600&amp;display=swap"/><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="og:site_name" content="🐏 wsg.net"/><meta property="og:title" content="... Theia Rewrite: Updated Benchmark Results"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="... Theia Rewrite: Updated Benchmark Results"/><meta name="twitter:description" content="It’s Done! (Almost) It’s been almost two months since I decided to develop the entire framework from scratch again, and here we are, the job is done! Theia ECS is completely renewed and comes with even more features than before: Validation and strict constraints to ensure the use of only blittable t..."/><meta property="og:description" content="It’s Done! (Almost) It’s been almost two months since I decided to develop the entire framework from scratch again, and here we are, the job is done! Theia ECS is completely renewed and comes with even more features than before: Validation and strict constraints to ensure the use of only blittable t..."/><meta property="og:image:alt" content="It’s Done! (Almost) It’s been almost two months since I decided to develop the entire framework from scratch again, and here we are, the job is done! Theia ECS is completely renewed and comes with even more features than before: Validation and strict constraints to ensure the use of only blittable t..."/><meta property="twitter:domain" content="wiseshepherdgames.net/"/><meta property="og:url" content="https://wiseshepherdgames.net/Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite-benchmark"/><meta property="twitter:url" content="https://wiseshepherdgames.net/Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite-benchmark"/><link rel="icon" href="../../../static/icon.png"/><meta name="description" content="It’s Done! (Almost) It’s been almost two months since I decided to develop the entire framework from scratch again, and here we are, the job is done! Theia ECS is completely renewed and comes with even more features than before: Validation and strict constraints to ensure the use of only blittable t..."/><meta name="generator" content="Quartz"/><link href="../../../index.css" rel="stylesheet" type="text/css" data-persist="true"/><style>.expand-button {
+  position: absolute;
+  display: flex;
+  float: right;
+  padding: 0.4rem;
+  margin: 0.3rem;
+  right: 0;
+  color: var(--gray);
+  border-color: var(--dark);
+  background-color: var(--light);
+  border: 1px solid;
+  border-radius: 5px;
+  opacity: 0;
+  transition: 0.2s;
+}
+.expand-button > svg {
+  fill: var(--light);
+  filter: contrast(0.3);
+}
+.expand-button:hover {
+  cursor: pointer;
+  border-color: var(--secondary);
+}
+.expand-button:focus {
+  outline: 0;
+}
+
+pre:hover > .expand-button {
+  opacity: 1;
+  transition: 0.2s;
+}
+
+#mermaid-container {
+  position: fixed;
+  contain: layout;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: none;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+}
+#mermaid-container.active {
+  display: inline-block;
+}
+#mermaid-container > #mermaid-space {
+  border: 1px solid var(--lightgray);
+  background-color: var(--light);
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80vh;
+  width: 80vw;
+  overflow: hidden;
+}
+#mermaid-container > #mermaid-space > .mermaid-content {
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
+  overflow: visible;
+  min-height: 200px;
+  min-width: 200px;
+}
+#mermaid-container > #mermaid-space > .mermaid-content pre {
+  margin: 0;
+  border: none;
+}
+#mermaid-container > #mermaid-space > .mermaid-content svg {
+  max-width: none;
+  height: auto;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: var(--bodyFont);
+  transition: all 0.2s ease;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:hover {
+  background: var(--lightgray);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:active {
+  transform: translateY(1px);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:nth-child(2) {
+  width: auto;
+  padding: 0 12px;
+  font-size: 14px;
+}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiQzpcXFVzZXJzXFxyZXplblxcT25lRHJpdmVcXMOBcmVhIGRlIFRyYWJhbGhvXFxQUk9KRUNUU1xcd2lzZXNoZXBoZXJkZ2FtZXMubmV0XFxxdWFydHpcXGNvbXBvbmVudHNcXHN0eWxlcyIsInNvdXJjZXMiOlsibWVybWFpZC5pbmxpbmUuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7RUFDQTs7QUFHRjtFQUNFO0VBQ0E7O0FBR0Y7RUFDRTs7O0FBS0Y7RUFDRTtFQUNBOzs7QUFJSjtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTs7QUFHRjtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7RUFDQTs7QUFHRjtFQUNFO0VBQ0E7O0FBSUo7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFOztBQUdGO0VBQ0U7O0FBSUY7RUFDRTtFQUNBO0VBQ0EiLCJzb3VyY2VzQ29udGVudCI6WyIuZXhwYW5kLWJ1dHRvbiB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxvYXQ6IHJpZ2h0O1xuICBwYWRkaW5nOiAwLjRyZW07XG4gIG1hcmdpbjogMC4zcmVtO1xuICByaWdodDogMDsgLy8gTk9URTogcmlnaHQgd2lsbCBiZSBzZXQgaW4gbWVybWFpZC5pbmxpbmUudHNcbiAgY29sb3I6IHZhcigtLWdyYXkpO1xuICBib3JkZXItY29sb3I6IHZhcigtLWRhcmspO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1saWdodCk7XG4gIGJvcmRlcjogMXB4IHNvbGlkO1xuICBib3JkZXItcmFkaXVzOiA1cHg7XG4gIG9wYWNpdHk6IDA7XG4gIHRyYW5zaXRpb246IDAuMnM7XG5cbiAgJiA+IHN2ZyB7XG4gICAgZmlsbDogdmFyKC0tbGlnaHQpO1xuICAgIGZpbHRlcjogY29udHJhc3QoMC4zKTtcbiAgfVxuXG4gICY6aG92ZXIge1xuICAgIGN1cnNvcjogcG9pbnRlcjtcbiAgICBib3JkZXItY29sb3I6IHZhcigtLXNlY29uZGFyeSk7XG4gIH1cblxuICAmOmZvY3VzIHtcbiAgICBvdXRsaW5lOiAwO1xuICB9XG59XG5cbnByZSB7XG4gICY6aG92ZXIgPiAuZXhwYW5kLWJ1dHRvbiB7XG4gICAgb3BhY2l0eTogMTtcbiAgICB0cmFuc2l0aW9uOiAwLjJzO1xuICB9XG59XG5cbiNtZXJtYWlkLWNvbnRhaW5lciB7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgY29udGFpbjogbGF5b3V0O1xuICB6LWluZGV4OiA5OTk7XG4gIGxlZnQ6IDA7XG4gIHRvcDogMDtcbiAgd2lkdGg6IDEwMHZ3O1xuICBoZWlnaHQ6IDEwMHZoO1xuICBvdmVyZmxvdzogaGlkZGVuO1xuICBkaXNwbGF5OiBub25lO1xuICBiYWNrZHJvcC1maWx0ZXI6IGJsdXIoNHB4KTtcbiAgYmFja2dyb3VuZDogcmdiYSgwLCAwLCAwLCAwLjUpO1xuXG4gICYuYWN0aXZlIHtcbiAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gIH1cblxuICAmID4gI21lcm1haWQtc3BhY2Uge1xuICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0tbGlnaHQpO1xuICAgIGJvcmRlci1yYWRpdXM6IDVweDtcbiAgICBwb3NpdGlvbjogZml4ZWQ7XG4gICAgdG9wOiA1MCU7XG4gICAgbGVmdDogNTAlO1xuICAgIHRyYW5zZm9ybTogdHJhbnNsYXRlKC01MCUsIC01MCUpO1xuICAgIGhlaWdodDogODB2aDtcbiAgICB3aWR0aDogODB2dztcbiAgICBvdmVyZmxvdzogaGlkZGVuO1xuXG4gICAgJiA+IC5tZXJtYWlkLWNvbnRlbnQge1xuICAgICAgcG9zaXRpb246IHJlbGF0aXZlO1xuICAgICAgdHJhbnNmb3JtLW9yaWdpbjogMCAwO1xuICAgICAgdHJhbnNpdGlvbjogdHJhbnNmb3JtIDAuMXMgZWFzZTtcbiAgICAgIG92ZXJmbG93OiB2aXNpYmxlO1xuICAgICAgbWluLWhlaWdodDogMjAwcHg7XG4gICAgICBtaW4td2lkdGg6IDIwMHB4O1xuXG4gICAgICBwcmUge1xuICAgICAgICBtYXJnaW46IDA7XG4gICAgICAgIGJvcmRlcjogbm9uZTtcbiAgICAgIH1cblxuICAgICAgc3ZnIHtcbiAgICAgICAgbWF4LXdpZHRoOiBub25lO1xuICAgICAgICBoZWlnaHQ6IGF1dG87XG4gICAgICB9XG4gICAgfVxuXG4gICAgJiA+IC5tZXJtYWlkLWNvbnRyb2xzIHtcbiAgICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICAgIGJvdHRvbTogMjBweDtcbiAgICAgIHJpZ2h0OiAyMHB4O1xuICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgIGdhcDogOHB4O1xuICAgICAgcGFkZGluZzogOHB4O1xuICAgICAgYmFja2dyb3VuZDogdmFyKC0tbGlnaHQpO1xuICAgICAgYm9yZGVyOiAxcHggc29saWQgdmFyKC0tbGlnaHRncmF5KTtcbiAgICAgIGJvcmRlci1yYWRpdXM6IDZweDtcbiAgICAgIGJveC1zaGFkb3c6IDAgMnB4IDRweCByZ2JhKDAsIDAsIDAsIDAuMSk7XG4gICAgICB6LWluZGV4OiAyO1xuXG4gICAgICAubWVybWFpZC1jb250cm9sLWJ1dHRvbiB7XG4gICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gICAgICAgIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICAgICAgICB3aWR0aDogMzJweDtcbiAgICAgICAgaGVpZ2h0OiAzMnB4O1xuICAgICAgICBwYWRkaW5nOiAwO1xuICAgICAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1saWdodGdyYXkpO1xuICAgICAgICBiYWNrZ3JvdW5kOiB2YXIoLS1saWdodCk7XG4gICAgICAgIGNvbG9yOiB2YXIoLS1kYXJrKTtcbiAgICAgICAgYm9yZGVyLXJhZGl1czogNHB4O1xuICAgICAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgICAgIGZvbnQtc2l6ZTogMTZweDtcbiAgICAgICAgZm9udC1mYW1pbHk6IHZhcigtLWJvZHlGb250KTtcbiAgICAgICAgdHJhbnNpdGlvbjogYWxsIDAuMnMgZWFzZTtcblxuICAgICAgICAmOmhvdmVyIHtcbiAgICAgICAgICBiYWNrZ3JvdW5kOiB2YXIoLS1saWdodGdyYXkpO1xuICAgICAgICB9XG5cbiAgICAgICAgJjphY3RpdmUge1xuICAgICAgICAgIHRyYW5zZm9ybTogdHJhbnNsYXRlWSgxcHgpO1xuICAgICAgICB9XG5cbiAgICAgICAgLy8gU3R5bGUgdGhlIHJlc2V0IGJ1dHRvbiBkaWZmZXJlbnRseVxuICAgICAgICAmOm50aC1jaGlsZCgyKSB7XG4gICAgICAgICAgd2lkdGg6IGF1dG87XG4gICAgICAgICAgcGFkZGluZzogMCAxMnB4O1xuICAgICAgICAgIGZvbnQtc2l6ZTogMTRweDtcbiAgICAgICAgfVxuICAgICAgfVxuICAgIH1cbiAgfVxufVxuIl19 */</style><link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet" type="text/css" data-persist="true"/><script src="../../../prescript.js" type="application/javascript" data-persist="true"></script><script type="application/javascript" data-persist="true">const fetchData = fetch("../../../static/contentIndex.json").then(data => data.json())</script><link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://wiseshepherdgames.net//index.xml"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image" content="https://wiseshepherdgames.net//Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite-benchmark-og-image.webp"/><meta property="og:image:url" content="https://wiseshepherdgames.net//Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite-benchmark-og-image.webp"/><meta name="twitter:image" content="https://wiseshepherdgames.net//Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite-benchmark-og-image.webp"/><meta property="og:image:type" content="image/.webp"/></head><body data-slug="Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite-benchmark"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><div class="flex-component" style="flex-direction: row; flex-wrap: nowrap; gap: 1rem;"><div style="flex-grow: 1; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><h2 class="page-title"><a href="../../..">🐏 wsg.net</a></h2></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="darkmode" style="margin-top:6px;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve" aria-label="Dark mode"><title>Dark mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve" aria-label="Light mode"><title>Light mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></button></div></div><div class="spacer mobile-only"></div><div class="search"><button class="search-button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title>Search</title><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg><p>Search</p></button><div class="search-container"><div class="search-space"><input autocomplete="off" class="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div class="search-layout" data-preview="true"></div></div></div></div><div class="explorer" data-behavior="link" data-collapsed="collapsed" data-savestate="true" data-data-fns="{&quot;order&quot;:[&quot;filter&quot;,&quot;map&quot;,&quot;sort&quot;],&quot;sortFn&quot;:&quot;(a,_)=>{switch(a.displayName){case\&quot;Projects\&quot;:return 0;case\&quot;Programming\&quot;:return 1;case\&quot;Life\&quot;:return 2;case\&quot;Games\&quot;:return 3;default:return 4}}&quot;,&quot;filterFn&quot;:&quot;node=>node.slugSegment!==\&quot;tags\&quot;&quot;,&quot;mapFn&quot;:&quot;node=>node&quot;}"><button type="button" class="explorer-toggle mobile-explorer hide-until-loaded" data-mobile="true" aria-controls="explorer-13"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg></button><button type="button" class="title-button explorer-toggle desktop-explorer" data-mobile="false" aria-expanded="true"><h2>Content</h2><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-13" class="explorer-content" aria-expanded="false" role="group"><ul class="explorer-ul overflow" id="list-0"><li class="overflow-end"></li></ul></div><template id="template-file"><li><a href="#"></a></li></template><template id="template-folder"><li><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div><button class="folder-button"><span class="folder-title"></span></button></div></div><div class="folder-outer"><ul class="content"></ul></div></li></template></div><div class="recent-notes desktop-only"><h3>Recently Published</h3><ul class="recent-ul"><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite-benchmark" class="internal">Theia Rewrite: Updated Benchmark Results</a></h3></div><p class="meta"><time datetime="2026-04-26T03:00:00.000Z">Apr 26, 2026</time></p><ul class="tags"></ul></div></li><li class="recent-li"><div class="section"><div class="desc"><h3><a href="../../../Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite" class="internal">Theia Complete Rewrite: Benchmark Results Sneak Peek</a></h3></div><p class="meta"><time datetime="2026-04-09T03:00:00.000Z">Apr 09, 2026</time></p><ul class="tags"></ul></div></li></ul></div></div><div class="center"><div class="page-header"><div class="popover-hint"><p show-comma="true" class="content-meta"><time datetime="2026-04-26T03:00:00.000Z">Apr 26, 2026</time><span>3 min read</span></p><nav class="breadcrumb-container" aria-label="breadcrumbs"><div class="breadcrumb-element"><a href="../../../">Home</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../../../Projects/">Projects</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../../../Projects/Libraries-and-Frameworks/">Libraries and Frameworks</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../../../Projects/Libraries-and-Frameworks/Theia-ECS/">Theia ECS</a><p> ❯ </p></div><div class="breadcrumb-element"><a href>Theia Rewrite: Updated Benchmark Results</a></div></nav><h1 class="article-title">Theia Rewrite: Updated Benchmark Results</h1></div></div><article class="popover-hint"><h3 id="its-done-almost">It’s Done! (Almost)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#its-done-almost" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>It’s been almost <strong>two months</strong> since I decided to <strong>develop the entire framework from scratch</strong> again, and here we are, <strong>the job is done</strong>! Theia ECS is completely renewed and comes with <strong>even more features than before</strong>:</p>
+<ul>
+<li>Validation and strict constraints to ensure the use of <strong>only blittable types</strong>;</li>
+<li><strong>Events</strong> (entity lifecycle, components, and relations), allowing different event scopes (World or Assemblage);</li>
+<li><strong>Jobs</strong>, with <strong>built-in parallel</strong> systems and parallel query execution (per <em>chunk</em>);</li>
+<li><strong>Types as enums</strong> (capable of matching or including a certain component or relation to an enum value);</li>
+<li><strong>World-bounded</strong> single-instance components, known as <strong>singleton components</strong> (called Uniques);</li>
+<li>Improved DataTable, now called ManagedData (a custom, dictionary-like collection for classes);</li>
+<li>A <strong>greatly improved relation system</strong>: <span class="text-highlight">bilateral linkage, with all operations as O(1) and thread-safe</span>;</li>
+<li>Improved Systems;</li>
+<li>A greatly <strong>improved serialization/deserialization system</strong>;</li>
+<li>Exceptions (yes, that is a feature!) screaming at the programmer so we don’t mess things up; for example, it <strong>throws when attempting to perform an action that may trigger a structural change during a query</strong>.</li>
+</ul>
+<p>Other basic features have also been improved, and <em>we’ll go over everything in detail another day</em>.</p>
+<p>This new version <strong>greatly improves what I started around one or two years ago</strong>, and now, to be totally fair, <em>I feel ashamed of a lot of the mistakes made in the old version</em>… but just like our <em>for loops</em>, <span class="text-highlight">we need to iterate on our solutions in order to improve our work</span>.</p>
+<p>As I pointed out in the <a href="../../../Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite" class="internal alias" data-slug="Projects/Libraries-and-Frameworks/Theia-ECS/theia-rewrite">sneak peek</a> article, <span class="text-highlight">Theia’s new version is fully implemented in managed C#</span> (that means no unsafe code), and now, with version 1.0 finished and <strong>updated benchmark results</strong>, I can safely say that <span class="text-highlight">Theia is one of the fastest C# ECS framework (usually scoring #1 in most counts across many different categories, according to the presented benchmark) for the operations that matter most in a running game loop</span>: iterating entities via queries (it got even faster after a refactor I did since the sneak peek article), spawning and despawning, and relation management.</p>
+<p>Just to refresh our memories, due to its archetype’s underlying implementation, which aims for lazy initialization of chunks, structural changes when adding or removing components can be a little costly at high entity counts, as I mentioned before.</p>
+<p>Without further ado, as I did in the sneak peek, I’ve decided to compile all the results and plot them on a graph. <strong>Check out the results for yourself below!</strong> Theia’s new version will be <strong>released soon</strong>, including the benchmark (with the results) and unit test projects; the <strong>final step is solid documentation</strong>, which is already on the way!</p>
+
+<style>
+.w{padding: 16px}
+
+.cats{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.tvars{display:flex;gap:5px;margin-bottom:24px;}
+
+.cat, .tv{font-size:14px;padding:4px 11px;border: 0;border-radius: 8px; cursor:pointer; font-family: inherit; background: transparent; color: var(--darkgray);}
+.cat.on, .tv.on{background: var(--lightgray);color:var(--tertiary);}
+.cat:hover, .tv:hover{background:var(--lightgray)}
+
+.tv:disabled{opacity:.35;cursor:default}
+.tv:disabled:hover{background: transparent;}
+
+.sub{font-size:14px;color:var(--lightgray); align-self: center;}
+
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px; justify-content: center;}
+
+.li{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tertiary);cursor:pointer;padding:3px 8px;border-radius:8px;border: 0;user-select:none;background: var(--lightgray)}
+.li:hover,.li.off:hover{ color: var(--light);border-radius: 8px; background:var(--darkgray)}
+.li.off{background: transparent;}
+.li.na{opacity:.3;cursor:default;pointer-events:none;}
+.li.na:hover{background:var(--lightgray);color:var(--tertiary);}
+
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+.ins{font-size:14px;color: var(--darkgray);border-left:2px solid var(--secondary);padding:7px 11px;margin-top:10px;}
+
+
+</style>
+<div class="w">
+  
+  <div style="padding:1rem 0">
+  <h2 style="margin:0 0 1rem 0">Interactive ECS Framework Benchmark Dashboard.</h2>
+  
+  <div class="cats" id="cats"></div>
+  <div class="tvars" id="tvars">
+  <button class="tv" data-t="0">T1</button>
+  <button class="tv" data-t="1">T3</button>
+  <button class="tv" data-t="2">T5</button>
+  <span class="sub" id="sub"></span>
+  </div>
+  
+  <div style="position:relative;width:100%;height:300px;margin:12px 0">
+  <canvas id="ch" role="img" aria-label="ECS framework benchmark line chart"></canvas>
+  </div>
+  
+  <div class="leg" id="leg"></div>
+  <div class="ins" id="ins"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const FW = [
+  {n:'Theia',     c:'#534AB7'},
+  {n:'Friflo',    c:'#1D9E75'},
+  {n:'Frent',     c:'#378ADD'},
+  {n:'EntitiesDb',c:'#ff1e69'},
+  {n:'Arch',      c:'#888780'},
+  {n:'Fennecs',   c:'#D85A30'}
+];
+const ENTITY_LABELS = ['16','256','512','1k','4k','8k','16k','32k'];
+const RELATION_LABELS = ['1','100'];
+const NA = null;
+
+function entries(rows){return rows;}
+
+const CATS = [
+  {label:'Query (Exclusive)', variants:[
+    {name:'T1',sub:'Exclusive Query T1 - μs (lower = better)',ins:'Theia leads at every size by 2-3×. EntitiesDb stays competitive from 4k upwards. Fennecs is 3-5× slower throughout.',rows:[
+      [0.8612,2.5970,4.4990,8.5237,10.2977,12.6041,17.7600,23.7206],
+      [2.7479,7.0429,12.8034,24.4706,28.5538,32.8214,42.2929,60.8786],
+      [1.8784,9.1571,17.6689,33.2764,40.4533,45.1167,57.5857,80.8643],
+      [2.1448,7.3476,13.3278,25.2364,27.8357,29.6929,31.3174,38.1429],
+      [4.5062,9.6830,14.8560,26.5370,28.0061,31.7929,37.3317,52.1414],
+      [5.6958,12.3385,23.0191,40.4867,47.1962,55.8980,77.5647,112.2538]]},
+    {name:'T3',sub:'Exclusive Query T3 - μs (lower = better)',ins:'Theia dominates at all sizes. EntitiesDb has the cleanest scaling curve. Frent and Fennecs degrade past 512.',rows:[
+      [1.065,3.381,5.589,10.396,14.677,17.217,26.125,41.214],
+      [3.005,8.841,14.973,28.522,31.831,37.327,47.779,68.193],
+      [2.685,15.050,32.222,61.681,62.382,80.980,87.007,119.827],
+      [2.499,12.786,16.694,31.442,33.462,36.900,43.933,56.473],
+      [4.693,10.809,16.883,29.074,32.908,39.121,49.556,75.214],
+      [8.606,17.023,45.310,91.323,72.471,151.833,115.392,232.021]]},
+    {name:'T5',sub:'Exclusive Query T5 - μs (lower = better)',ins:'Theia leads decisively at every size. EntitiesDb, Friflo and Arch form a tight cluster behind. Frent has mid-range performance.',rows:[
+      [1.246,4.447,7.334,15.236,22.367,29.487,45.231,76.454],
+      [3.172,8.935,16.275,31.993,38.531,49.480,71.071,112.813],
+      [3.492,22.317,58.335,115.981,95.853,128.926,144.029,122.366],
+      [2.796,11.667,19.494,36.230,43.329,52.770,70.864,105.267],
+      [4.833,11.547,18.411,32.027,40.314,50.577,71.557,114.531],
+      [9.893,21.850,71.583,167.540,192.282,128.617,201.340,214.704]]}
+  ]},
+  {label:'Query (Cross-Archetype)', variants:[
+    {name:'T1',sub:'Cross-Archetype Query T1 - μs (lower = better)',ins:'Theia is fastest at every size, often by 2× or more. EntitiesDb scales remarkably well at large counts. Fennecs is 3-5× slower.',rows:[
+      [0.9714,2.8440,4.7240,9.4778,10.5897,14.1125,16.6472,25.4108],
+      [3.0948,7.2676,13.0804,24.6396,28.4923,33.2143,43.0267,61.9267],
+      [1.9145,9.2750,17.2345,34.6540,40.3462,45.6071,57.8846,83.5400],
+      [2.5539,8.0265,13.9645,26.5934,26.9333,30.1143,31.4238,37.8250],
+      [5.2990,10.4062,15.4394,27.6500,28.2067,31.9000,39.3367,55.6112],
+      [7.1908,13.4714,23.8723,43.0450,81.5794,102.3312,118.3636,133.9500]]},
+    {name:'T3',sub:'Cross-Archetype Query T3 - μs (lower = better)',ins:'Theia leads throughout. EntitiesDb pulls ahead of Friflo at large counts. Frent degrades with scale; Fennecs results are erratic.',rows:[
+      [1.238,3.606,5.913,11.599,16.436,20.358,29.838,49.371],
+      [3.216,8.355,15.444,29.431,32.546,37.571,47.907,67.527],
+      [2.909,15.150,31.518,62.893,66.131,74.190,88.573,125.400],
+      [2.975,10.241,18.400,35.061,36.659,38.653,44.482,57.843],
+      [5.502,9.821,17.291,31.040,33.793,38.964,52.931,76.326],
+      [10.036,19.707,43.946,91.936,163.026,250.027,61.845,94.484]]},
+    {name:'T5',sub:'Cross-Archetype Query T5 - μs (lower = better)',ins:'Theia leads decisively at all sizes (83μs vs 107-115μs at 32k). Fennecs results are mid-range. Frent seems to struggle at mid-range counts.',rows:[
+      [1.514,3.617,7.793,15.740,20.639,30.621,48.064,83.150],
+      [3.615,10.317,17.150,32.375,39.508,52.086,71.907,114.820],
+      [3.913,25.891,51.118,105.675,103.788,116.172,137.321,129.436],
+      [3.466,17.444,20.164,37.321,44.296,56.050,70.714,107.535],
+      [5.322,12.799,19.561,34.524,41.083,51.857,72.743,114.037],
+      [13.557,25.243,75.184,119.384,332.586,68.182,86.519,159.184]]}
+  ]},
+  {label:'Create Entity', variants:[
+    {name:'T1',sub:'Create Entity T1 - μs (lower = better)',ins:'Frent is fastest at small-to-mid sizes (16-1k). Theia takes the lead from 4k onward.',rows:[
+      [10.296,41.545,73.338,135.049,178.808,248.179,351.884,705.293],
+      [12.302,61.217,144.101,313.115,883.785,1276.662,1615.028,6473.771],
+      [3.855,21.200,43.433,83.236,176.419,293.907,557.654,1099.630],
+      [10.221,56.130,94.946,198.060,757.641,1418.379,2593.463,5201.308],
+      [21.939,74.401,128.567,238.554,910.069,2002.008,3787.514,7071.580],
+      [69.608,765.920,1566.784,3056.529,10497.893,3266.086,4061.431,8010.575]]},
+    {name:'T3',sub:'Create Entity T3 - μs (lower = better)',ins:'Frent leads at 16-1k; Theia takes over from 4k. At 32k, Theia (796μs) beats Arch (1.3ms) and EntitiesDb (3.0ms).',rows:[
+      [12.352,38.950,85.456,157.238,243.706,300.877,397.683,796.131],
+      [13.047,63.644,146.864,319.044,873.311,1284.424,3400.690,6568.261],
+      [5.548,36.686,69.072,133.996,254.154,438.373,634.856,863.563],
+      [10.658,55.029,113.766,216.758,808.392,1651.989,2547.233,2987.730],
+      [16.368,81.254,145.438,295.232,1082.346,2137.177,4094.272,1289.300],
+      [359.428,2895.285,5874.065,2841.125,4626.457,7931.229,15449.414,31541.833]]},
+    {name:'T5',sub:'Create Entity T5 - μs (lower = better)',ins:'Frent only leads at 16. Theia dominates from 256 onward, 2-7× faster than Friflo and EntitiesDb at large counts.',rows:[
+      [10.996,46.581,92.777,181.723,241.887,352.653,483.176,905.658],
+      [16.467,66.338,158.835,327.980,822.502,1229.479,1506.835,5963.914],
+      [7.616,50.640,93.402,192.705,321.866,469.684,711.546,1979.129],
+      [11.700,62.994,126.354,281.165,998.619,1768.690,2712.232,7820.800],
+      [17.726,97.573,171.131,363.207,1376.454,2621.085,5119.580,1559.887],
+      [585.800,6078.260,11492.583,2686.700,7965.136,15084.433,30948.371,59751.647]]}
+  ]},
+  {label:'Create Entity (Deferred)', skip:[5], variants:[
+    {name:'T1',sub:'Create Entity Deferred T1 - μs (lower = better)',ins:'Theia is the fastest deferred creator at every size, 2-12× faster than competitors at large batches.',rows:[
+      [12.60,54.12,105.06,242.93,308.02,490.70,803.49,1440.71],
+      [14.72,114.28,294.03,516.39,1119.73,1446.70,4584.35,8074.86],
+      [15.77,173.30,288.06,318.77,726.66,1035.21,3291.81,2654.27],
+      [18.35,158.68,313.25,666.81,2473.27,4241.93,9188.14,17515.51],
+      [39.11,290.11,546.55,928.31,2470.18,3233.64,4928.20,7930.82],
+      null]},
+    {name:'T3',sub:'Create Entity Deferred T3 - μs (lower = better)',ins:'Theia dominates - at 32k it takes 1.6ms while the rest need 4.5-9.9ms. Consistently 2-7× faster across all sizes.',rows:[
+      [15.98,60.55,138.94,234.89,366.15,553.39,909.21,1603.12],
+      [28.15,229.11,401.71,732.60,1594.55,2162.76,5380.13,4736.44],
+      [33.91,385.45,539.63,834.96,2890.12,5569.57,3047.18,6490.60],
+      [22.73,288.32,455.36,926.06,3306.65,6914.59,2955.76,4525.41],
+      [44.37,395.87,744.32,1445.64,3568.11,4980.61,5141.99,9896.56],
+      null]},
+    {name:'T5',sub:'Create Entity Deferred T5 - μs (lower = better)',ins:'Theia leads by huge margins. At 32k, Theia takes 1.8ms while Friflo needs 11.3ms and Arch needs 13.7ms.',rows:[
+      [15.20,73.61,154.06,319.24,475.62,673.18,1046.30,1809.11],
+      [32.65,305.73,512.11,929.58,1803.47,2492.37,6313.38,11291.47],
+      [59.89,585.68,850.53,1582.38,5125.09,2423.94,5182.37,10150.73],
+      [30.95,336.25,663.68,1190.49,4700.19,8877.98,3367.43,6970.65],
+      [59.04,496.84,1018.18,1827.57,4376.34,7169.13,7063.33,13668.35],
+      null]}
+  ]},
+  {label:'Destroy Entity', variants:[
+    {name:'T1',sub:'Destroy Entity T1 - μs (lower = better)',ins:'Theia leads small counts and dominates from 8k upward (190μs vs 354μs+ for the next-best). Friflo takes 256 and 1k.',rows:[
+      [2.743,26.852,55.748,195.290,205.703,190.518,271.000,455.087],
+      [3.351,23.514,143.094,116.200,308.709,553.743,1033.280,2078.193],
+      [3.924,36.965,71.323,138.065,372.163,707.160,1351.796,2565.129],
+      [4.504,37.493,127.789,168.164,446.100,773.673,1447.620,2835.153],
+      [4.936,57.382,100.650,198.195,264.717,353.320,534.069,864.683],
+      [7.647,75.826,152.984,306.976,629.892,239.621,450.650,902.624]]},
+    {name:'T3',sub:'Destroy Entity T3 - μs (lower = better)',ins:'Theia leads at most sizes; Friflo wins at 256. Frent surprisingly fastest at 32k (654μs vs Theia 595μs).',rows:[
+      [3.290,32.392,73.793,144.056,179.593,233.871,358.825,594.847],
+      [3.984,29.600,167.229,141.286,368.714,614.138,1168.367,2243.092],
+      [5.061,53.163,101.145,200.941,609.395,1157.607,2166.208,654.470],
+      [5.323,59.679,178.344,225.122,612.743,1162.271,2141.393,4111.250],
+      [5.339,61.842,119.800,228.179,311.756,444.821,679.300,1119.354],
+      [11.220,139.326,234.658,359.731,350.100,333.200,657.995,1307.604]]},
+    {name:'T5',sub:'Destroy Entity T5 - μs (lower = better)',ins:'Theia leads up to 16k. At 32k Frent (749μs) edges past Theia (843μs).',rows:[
+      [3.663,45.667,84.968,157.323,248.643,316.585,485.608,842.600],
+      [4.360,44.425,182.375,168.543,442.287,791.185,1268.803,2414.164],
+      [6.131,70.794,132.251,263.130,862.656,1608.200,3208.693,748.509],
+      [6.032,66.738,218.685,257.050,731.600,1397.058,2666.008,5213.115],
+      [5.441,69.722,130.414,259.800,373.131,516.521,805.427,1370.507],
+      [15.217,188.993,345.892,383.421,227.412,435.629,843.367,1712.647]]}
+  ]},
+  {label:'Destroy Entity (Deferred)', skip:[5], variants:[
+    {name:'T1',sub:'Destroy Entity Deferred T1 - μs (lower = better)',ins:'Theia leads at every size. At 32k, Theia (778μs) just edges Friflo (849μs) and Frent (853μs).',rows:[
+      [3.871,33.483,76.268,192.344,201.018,290.600,465.981,777.747],
+      [5.682,31.617,177.808,154.189,358.379,606.350,1178.014,848.602],
+      [5.069,41.542,78.757,168.740,438.269,803.774,1476.020,853.057],
+      [6.359,60.586,170.971,263.265,732.213,1325.214,2701.277,5290.362],
+      [14.091,111.233,172.668,309.742,657.906,998.351,1973.727,3630.810],
+      null]},
+    {name:'T3',sub:'Destroy Entity Deferred T3 - μs (lower = better)',ins:'Theia leads throughout. At 32k, Theia (913μs) is 1.8× faster than EntitiesDb and 2.3× faster than Friflo.',rows:[
+      [4.477,46.127,86.144,235.116,239.873,328.762,555.308,913.158],
+      [5.897,50.886,187.403,164.973,431.840,666.447,1158.314,2089.464],
+      [6.152,58.599,106.762,224.179,660.192,1148.957,2225.840,4982.160],
+      [7.321,70.760,217.925,288.000,885.840,1655.492,3628.443,1672.657],
+      [13.750,113.455,174.846,318.604,739.423,1210.050,2159.531,3341.400],
+      null]},
+    {name:'T5',sub:'Destroy Entity Deferred T5 - μs (lower = better)',ins:'Theia leads from 16 to 16k. Frent (1051μs) edges out Theia (1204μs) at 32k.',rows:[
+      [4.702,49.957,160.178,191.381,301.187,412.415,698.015,1204.023],
+      [6.478,46.494,202.917,197.481,471.435,759.807,1400.180,2460.979],
+      [7.225,70.400,138.161,285.935,866.987,1628.083,3122.115,1050.707],
+      [7.916,84.100,248.524,312.314,1093.187,2122.586,3846.121,2078.136],
+      [14.830,106.983,172.712,310.081,694.029,1293.250,2328.085,3199.395],
+      null]}
+  ]},
+  {label:'Add Component', variants:[
+    {name:'T1',sub:'Add Component T1 - μs (lower = better)',ins:'Frent leads at small counts; Theia at medium. At 32k, Friflo (1.2ms) and Frent (1.4ms) dominate while Theia degrades to 6.9ms.',rows:[
+      [12.729,75.144,238.166,339.115,917.771,1803.857,3550.686,6916.413],
+      [13.776,176.211,252.657,403.815,1491.033,2921.546,5751.857,1191.852],
+      [9.500,82.295,160.146,302.916,805.674,1533.464,2767.262,1402.497],
+      [15.964,148.208,375.092,542.030,1947.243,4133.069,7768.721,1794.807],
+      [27.728,189.640,375.700,738.067,2531.179,2448.896,3302.469,2072.820],
+      [135.450,983.963,1946.925,3761.169,1408.205,3052.792,5042.836,10618.167]]},
+    {name:'T3',sub:'Add Component T3 - μs (lower = better)',ins:'Frent and Theia lead at small-to-mid sizes. Friflo wins at 16k (677μs) and 32k (1.3ms) while Theia falls to 9.5ms.',rows:[
+      [15.44,102.65,293.44,377.67,1248.39,2464.83,4887.92,9479.55],
+      [15.60,223.69,299.46,488.08,1821.75,3667.54,676.74,1310.99],
+      [12.06,109.26,204.19,388.89,1128.48,2117.14,4343.01,1740.34],
+      [18.29,272.18,470.27,655.82,2640.61,4915.41,1464.24,2300.81],
+      [40.24,282.32,532.63,1062.81,3780.44,7420.02,1717.55,3421.80],
+      [115.19,1416.92,2760.45,2118.95,1885.94,3575.94,7184.73,14228.01]]},
+    {name:'T5',sub:'Add Component T5 - μs (lower = better)',ins:'Frent and Theia lead at small sizes. Friflo dominates at 16k (769μs vs Theia 5.9ms).',rows:[
+      [18.17,128.14,353.75,475.48,1592.51,3172.06,5965.01,1994.63],
+      [20.55,258.32,310.83,590.60,2211.12,4272.49,768.71,1522.85],
+      [14.73,145.86,256.28,465.84,1534.09,3082.26,5718.85,2022.48],
+      [19.12,304.20,402.20,779.58,3023.87,6040.68,1250.00,2595.75],
+      [38.64,358.33,696.62,1356.74,4957.83,11041.28,2363.89,4674.57],
+      [153.62,1810.58,515.93,1545.15,2302.64,4379.68,8847.14,17900.83]]}
+  ]},
+  {label:'Add Component (Deferred)', onlyT3:true, skip:[5], variants:[
+    {name:'T3',sub:'Add Component Deferred T3 - μs (lower = better)',ins:'Theia and Frent lead at small counts. Theia degrades at 16k but recovers at 32k (1.9ms).',rows:[
+      [19.18,120.43,335.41,450.77,1445.09,2685.35,5327.00,1923.89],
+      [23.69,132.17,305.04,564.89,1288.92,2175.38,3953.93,2536.27],
+      [17.79,145.96,269.76,472.87,902.62,2613.69,4950.69,2617.94],
+      [20.41,315.14,446.17,849.98,3105.54,6083.70,3121.59,6068.38],
+      [51.52,432.25,769.88,1467.99,6301.97,10301.14,23555.07,207949.76],
+      null]}
+  ]},
+  {label:'Remove Component', variants:[
+    {name:'T2',sub:'Remove Component T2 - μs (lower = better)',ins:'Theia leads small-medium sizes. Frent dominates from 8k upward. At 32k Frent (1.3ms) is 4× faster than Theia (5.4ms).',rows:[
+      [10.979,49.308,158.068,195.577,714.321,1354.277,2698.275,5417.793],
+      [13.555,91.269,192.570,376.861,1379.400,2683.515,5609.314,3309.827],
+      [8.687,80.421,161.390,288.399,946.908,896.539,3696.760,1346.312],
+      [15.202,228.586,354.221,545.443,2136.446,4126.807,8093.993,1888.881],
+      [34.974,214.643,408.481,800.652,2920.264,5975.120,3246.807,2261.751],
+      [74.112,835.860,1622.983,783.771,1137.173,1835.513,3684.000,7140.407]]},
+    {name:'T3',sub:'Remove Component T3 - μs (lower = better)',ins:'Theia leads up to 4k.',rows:[
+      [14.19,69.60,204.88,249.91,864.53,1700.57,3527.07,6667.40],
+      [14.45,179.49,254.55,414.78,1536.34,3082.15,5958.35,1135.22],
+      [10.51,92.94,179.45,342.79,1178.97,2193.84,4306.93,1526.86],
+      [15.96,258.66,364.77,608.82,2253.67,1099.51,9063.31,2024.31],
+      [37.95,264.79,482.45,928.81,3548.37,6910.12,1495.30,2923.95],
+      [85.59,1046.96,2018.82,954.43,1370.15,2334.23,4520.54,10110.10]]},
+    {name:'T5',sub:'Remove Component T5 - μs (lower = better)',ins:'Theia leads small-medium sizes. Friflo wins at 16k and 32k.',rows:[
+      [16.65,102.16,263.57,343.59,1280.08,2518.10,4730.20,9921.54],
+      [15.30,229.15,339.47,508.53,1950.68,3678.74,688.50,1415.59],
+      [12.80,165.60,236.21,445.80,1622.35,3132.84,6025.40,1865.31],
+      [19.02,210.20,370.30,707.65,2664.13,5175.63,2792.44,5899.43],
+      [44.07,321.23,612.90,1217.96,4721.46,9293.70,2141.95,4267.59],
+      [127.88,1468.60,812.06,520.68,1936.34,3417.58,6743.04,14182.78]]}
+  ]},
+  {label:'Remove Component (Deferred)', onlyT3:true, skip:[5], variants:[
+    {name:'T3',sub:'Remove Component Deferred T3 - μs (lower = better)',ins:'Theia leads up to 8k. At 32k, Frent (2.1ms) is 3.5× faster than Theia (7.2ms).',rows:[
+      [14.60,79.88,244.49,356.02,927.92,1831.14,3744.74,7216.93],
+      [19.24,232.08,333.42,482.43,1180.43,2046.69,3744.91,2600.45],
+      [14.46,114.45,238.59,454.04,1291.26,1144.64,4446.58,2053.19],
+      [20.92,312.95,421.49,714.88,2741.36,5124.90,3292.11,4206.03],
+      [61.89,590.12,1236.53,2107.43,7529.23,9394.49,24229.19,214399.25],
+      null]}
+  ]},
+  {label:'Get Component', onlyT1:true, variants:[
+    {name:'T1',sub:'Get Component T1 - μs (lower = better)',ins:'Friflo dominates at all sizes. Theia is solid 2nd up to 1k, then mid-pack from 4k.',rows:[
+      [1.1632,9.7500,19.6333,39.0615,155.1822,91.9900,150.7929,267.9933],
+      [0.5679,4.5100,9.6188,19.6661,32.0615,48.4423,81.3143,147.1143],
+      [1.7290,15.7692,34.5926,70.5563,83.7033,102.0533,143.5600,231.8667],
+      [1.6064,14.0429,28.0821,56.8698,70.6769,89.0600,130.3467,206.3385],
+      [2.2839,21.3385,43.4447,88.3688,118.5033,143.2308,204.6933,252.6012],
+      [7.9293,106.0062,198.3533,383.9200,231.8753,366.7240,729.7615,1266.4786]]}
+  ]},
+  {label:'Set Component', onlyT1:true, skip:[2], variants:[
+    {name:'T1',sub:'Set Component T1 - μs (lower = better)',ins:'Theia and EntitiesDb tie at small counts. EntitiesDb is best from 4k upward. Friflo degrades sharply past 4k.',rows:[
+      [1.078,9.547,19.097,38.294,149.288,88.600,146.829,261.210],
+      [1.271,11.897,24.069,38.435,120.873,222.873,431.927,827.367],
+      null,
+      [1.194,9.923,20.917,41.150,59.620,75.971,118.900,205.431],
+      [2.388,22.778,45.800,92.742,109.750,134.357,190.153,296.643],
+      [7.647,104.587,194.340,382.762,954.431,372.809,708.129,1260.554]]}
+  ]},
+  {label:'Add Relation (Evaluated)', onlyT1:true, skip:[2,3], rel:true, variants:[
+    {name:'T1',sub:'Add Evaluated Relation T1 - μs (lower = better)',ins:'Theia leads at both sizes. At 100 relations, Theia (58μs) is ~3× faster than Friflo and Arch, ~100× faster than Fennecs (5.6ms).',rows:[
+      [4.443,57.681],
+      [13.183,166.306],
+      null,
+      null,
+      [40.772,189.799],
+      [26.318,5575.894]]}
+  ]},
+  {label:'Add Relation (Tag)', onlyT1:true, skip:[2,3], rel:true, variants:[
+    {name:'T1',sub:'Add Tag Relation T1 - μs (lower = better)',ins:'Theia leads at both sizes. At 100, Theia (54μs) is ~3.5× faster than Arch, ~5× faster than Friflo, and ~74× faster than Fennecs.',rows:[
+      [4.393,54.508],
+      [13.200,265.011],
+      null,
+      null,
+      [40.394,190.591],
+      [26.344,4037.213]]}
+  ]},
+  {label:'Get Relation (Evaluated)', onlyT1:true, skip:[2,3], rel:true, variants:[
+    {name:'T1',sub:'Get Evaluated Relation T1 - μs (lower = better)',ins:'At 1 relation, Friflo (1.14μs) is fractionally fastest. At 100, Theia (17μs) leads decisively while Friflo collapses to 121μs.',rows:[
+      [1.211,16.920],
+      [1.138,120.908],
+      null,
+      null,
+      [1.957,32.248],
+      [4.371,468.283]]}
+  ]},
+  {label:'Get Relation (Tag)', onlyT1:true, skip:[2,3], rel:true, variants:[
+    {name:'T1',sub:'Get Tag Relation T1 - μs (lower = better)',ins:'Theia leads at both sizes. At 100, Theia (12.3μs) is ~10× faster than Friflo (130μs). Fennecs is competitive here unlike other relation ops.',rows:[
+      [0.9010,12.3381],
+      [1.2031,129.5065],
+      null,
+      null,
+      [2.5537,34.6200],
+      [1.4978,26.0060]]}
+  ]},
+  {label:'Get All Relations (Evaluated)', onlyT1:true, skip:[2,3,5], rel:true, variants:[
+    {name:'T1',sub:'Get All Evaluated Relations T1 - μs (lower = better)',ins:'All three frameworks within 0.7-1.1μs at both sizes. Friflo is fractionally fastest. Differences are essentially noise.',rows:[
+      [1.0303,1.0920],
+      [0.7370,0.8220],
+      null,
+      null,
+      [0.9360,1.0808],
+      null]}
+  ]},
+  {label:'Get All Relations (Tag)', onlyT1:true, skip:[2,3,5], rel:true, variants:[
+    {name:'T1',sub:'Get All Tag Relations T1 - μs (lower = better)',ins:'Friflo slightly edges out.',rows:[
+      [0.7660,0.8505],
+      [0.7300,0.7240],
+      null,
+      null,
+      [1.0809,1.1439],
+      null]}
+  ]},
+  {label:'Remove Relation (Evaluated)', onlyT1:true, skip:[2,3], rel:true, variants:[
+    {name:'T1',sub:'Remove Evaluated Relation T1 - μs (lower = better)',ins:'Theia leads at both sizes. Theia\'s Batch variant, not presented here, is even faster at 100 (10.7μs vs 26.2μs regular).',rows:[
+      [1.392,26.246],
+      [2.000,109.129],
+      null,
+      null,
+      [9.481,143.617],
+      [8.533,3501.054]]}
+  ]},
+  {label:'Remove Relation (Tag)', onlyT1:true, skip:[2,3], rel:true, variants:[
+    {name:'T1',sub:'Remove Tag Relation T1 - μs (lower = better)',ins:'Theia leads at both sizes. Theia\'s Batch variant, not presented here, is ~3× faster at 100 (9.4μs vs 27.2μs regular).',rows:[
+      [1.462,27.162],
+      [2.066,114.593],
+      null,
+      null,
+      [10.303,143.564],
+      [8.193,3359.175]]}
+  ]},
+  {label:'World Constructor', noTabs:true, bar:true, variants:[
+    {name:'',sub:'World Constructor - μs (lower = better)',ins:'Frent has the cheapest constructor (10μs); Theia is the slowest of the regulars (19μs) but only by 9μs. Fennecs is 4-7× slower than the rest.',rows:[
+      [19.24],[13.79],[10.00],[16.20],[17.83],[75.61]]}
+  ]}
+];
+
+const state = {
+  catIdx: 0,
+  variantIdx: 0,
+  hidden: new Set()
+};
+
+let chart = null;
+
+function getCat(){return CATS[state.catIdx];}
+function getVariant(){return getCat().variants[state.variantIdx];}
+function isSkipped(fwIdx){
+  const skip = getCat().skip || [];
+  return skip.includes(fwIdx);
+}
+
+function renderCats(){
+  const el = document.getElementById('cats');
+  el.innerHTML = '';
+  CATS.forEach((cat, i) => {
+    if (i === 12) {
+      const d1 = document.createElement('span');
+      d1.className = 'divider';
+      el.appendChild(d1);
+    }
+    if (i === 20) {
+      const d2 = document.createElement('span');
+      d2.className = 'divider';
+      el.appendChild(d2);
+    }
+    const b = document.createElement('button');
+    b.className = 'cat' + (i === state.catIdx ? ' on' : '');
+    b.textContent = cat.label;
+    b.addEventListener('click', () => selectCat(i));
+    el.appendChild(b);
+  });
+}
+
+function renderTabs(){
+  const cat = getCat();
+  const tvars = document.getElementById('tvars');
+  if (cat.noTabs) {
+    tvars.style.display = 'none';
+    return;
+  }
+  tvars.style.display = 'flex';
+  const btns = tvars.querySelectorAll('.tv');
+  const variantNames = cat.variants.map(v => v.name);
+  btns.forEach((b, i) => {
+    const tabName = ['T1','T3','T5'][i];
+    let targetVariantName = tabName;
+    if (cat.label === 'Remove component' && i === 0) targetVariantName = 'T2';
+    const idx = variantNames.indexOf(targetVariantName);
+    const enabled = idx !== -1;
+    b.disabled = !enabled;
+    b.classList.toggle('on', enabled && idx === state.variantIdx);
+    b.textContent = (cat.label === 'Remove component' && i === 0) ? 'T2' : tabName;
+    b.onclick = enabled ? () => selectVariant(idx) : null;
+  });
+  document.getElementById('sub').textContent = getVariant().sub;
+}
+
+function renderLegend(){
+  const el = document.getElementById('leg');
+  el.innerHTML = '';
+  FW.forEach((f, i) => {
+    const b = document.createElement('button');
+    const skipped = isSkipped(i);
+    b.className = 'li' + (skipped ? ' na' : (state.hidden.has(i) ? ' off' : ''));
+    b.disabled = skipped;
+    b.innerHTML = `<span class="ld" style="background:${f.c}"></span>${f.n}`;
+    if (!skipped) {
+      b.addEventListener('click', () => toggleFw(i));
+    }
+    el.appendChild(b);
+  });
+}
+
+function toggleFw(i){
+  if (state.hidden.has(i)) state.hidden.delete(i);
+  else state.hidden.add(i);
+  renderLegend();
+  renderChart();
+}
+
+function selectCat(i){
+  state.catIdx = i;
+  state.hidden = new Set();
+  const cat = getCat();
+  if (cat.noTabs) {
+    state.variantIdx = 0;
+  } else {
+    state.variantIdx = 0;
+  }
+  renderCats();
+  renderTabs();
+  renderLegend();
+  renderChart();
+  document.getElementById('ins').textContent = getVariant().ins;
+}
+
+function selectVariant(i){
+  state.variantIdx = i;
+  renderTabs();
+  renderChart();
+  document.getElementById('ins').textContent = getVariant().ins;
+}
+
+function renderChart(){
+  const cat = getCat();
+  const variant = getVariant();
+  const labels = cat.rel ? RELATION_LABELS : (cat.bar ? [''] : ENTITY_LABELS);
+  const chartType = cat.bar ? 'bar' : 'line';
+
+  const datasets = variant.rows.map((row, i) => {
+    if (row === null) return null;
+    if (state.hidden.has(i)) return null;
+    if (chartType === 'bar') {
+      return {
+        label: FW[i].n,
+        data: row,
+        backgroundColor: FW[i].c,
+        borderColor: FW[i].c,
+        borderWidth: 0
+      };
+    }
+    return {
+      label: FW[i].n,
+      data: row,
+      borderColor: FW[i].c,
+      backgroundColor: FW[i].c + '22',
+      borderWidth: i === 0 ? 2.5 : 1.5,
+      pointRadius: i === 0 ? 4 : 2.5,
+      spanGaps: true,
+      tension: 0.3,
+      fill: false,
+      borderDash: i === 0 ? [] : [4,3]
+    };
+  }).filter(Boolean);
+
+  const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  const gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+  const tickColor = isDark ? '#999' : '#666';
+
+  if (chart) {
+    chart.destroy();
+    chart = null;
+  }
+  const canvas = document.getElementById('ch');
+  chart = new Chart(canvas, {
+    type: chartType,
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: c => ` ${c.dataset.label}: ${c.parsed.y != null ? c.parsed.y.toFixed(2) + ' μs' : 'N/A'}`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { size: 11 } } },
+        y: {
+          grid: { color: gridColor },
+          ticks: {
+            color: tickColor,
+            font: { size: 11 },
+            callback: v => v >= 1000 ? (v/1000).toFixed(1) + 'ms' : v + 'μs'
+          }
+        }
+      }
+    }
+  });
+}
+
+renderCats();
+renderTabs();
+renderLegend();
+renderChart();
+document.getElementById('ins').textContent = getVariant().ins;
+</script>
+
+</article>
+
+<hr/><div class="page-footer"></div></div><div class="right sidebar"></div></div></div></body><script type="application/javascript" data-persist="true">function n(){let t=this.parentElement;t.classList.toggle("is-collapsed");let e=t.getElementsByClassName("callout-content")[0];if(!e)return;let l=t.classList.contains("is-collapsed");e.style.gridTemplateRows=l?"0fr":"1fr"}function c(){let t=document.getElementsByClassName("callout is-collapsible");for(let e of t){let l=e.getElementsByClassName("callout-title")[0],s=e.getElementsByClassName("callout-content")[0];if(!l||!s)continue;l.addEventListener("click",n),window.addCleanup(()=>l.removeEventListener("click",n));let o=e.classList.contains("is-collapsed");s.style.gridTemplateRows=o?"0fr":"1fr"}}document.addEventListener("nav",c);
+</script>
+<script type="module" data-persist="true">function E(a,e){if(!a)return;function t(o){o.target===this&&(o.preventDefault(),o.stopPropagation(),e())}function n(o){o.key.startsWith("Esc")&&(o.preventDefault(),e())}a?.addEventListener("click",t),window.addCleanup(()=>a?.removeEventListener("click",t)),document.addEventListener("keydown",n),window.addCleanup(()=>document.removeEventListener("keydown",n))}function f(a){for(;a.firstChild;)a.removeChild(a.firstChild)}var m=class{constructor(e,t){this.container=e;this.content=t;this.setupEventListeners(),this.setupNavigationControls(),this.resetTransform()}isDragging=!1;startPan={x:0,y:0};currentPan={x:0,y:0};scale=1;MIN_SCALE=.5;MAX_SCALE=3;cleanups=[];setupEventListeners(){let e=this.onMouseDown.bind(this),t=this.onMouseMove.bind(this),n=this.onMouseUp.bind(this),o=this.onTouchStart.bind(this),r=this.onTouchMove.bind(this),i=this.onTouchEnd.bind(this),s=this.resetTransform.bind(this);this.container.addEventListener("mousedown",e),document.addEventListener("mousemove",t),document.addEventListener("mouseup",n),this.container.addEventListener("touchstart",o,{passive:!1}),document.addEventListener("touchmove",r,{passive:!1}),document.addEventListener("touchend",i),window.addEventListener("resize",s),this.cleanups.push(()=>this.container.removeEventListener("mousedown",e),()=>document.removeEventListener("mousemove",t),()=>document.removeEventListener("mouseup",n),()=>this.container.removeEventListener("touchstart",o),()=>document.removeEventListener("touchmove",r),()=>document.removeEventListener("touchend",i),()=>window.removeEventListener("resize",s))}cleanup(){for(let e of this.cleanups)e()}setupNavigationControls(){let e=document.createElement("div");e.className="mermaid-controls";let t=this.createButton("+",()=>this.zoom(.1)),n=this.createButton("-",()=>this.zoom(-.1)),o=this.createButton("Reset",()=>this.resetTransform());e.appendChild(n),e.appendChild(o),e.appendChild(t),this.container.appendChild(e)}createButton(e,t){let n=document.createElement("button");return n.textContent=e,n.className="mermaid-control-button",n.addEventListener("click",t),window.addCleanup(()=>n.removeEventListener("click",t)),n}onMouseDown(e){e.button===0&&(this.isDragging=!0,this.startPan={x:e.clientX-this.currentPan.x,y:e.clientY-this.currentPan.y},this.container.style.cursor="grabbing")}onMouseMove(e){this.isDragging&&(e.preventDefault(),this.currentPan={x:e.clientX-this.startPan.x,y:e.clientY-this.startPan.y},this.updateTransform())}onMouseUp(){this.isDragging=!1,this.container.style.cursor="grab"}onTouchStart(e){if(e.touches.length!==1)return;this.isDragging=!0;let t=e.touches[0];this.startPan={x:t.clientX-this.currentPan.x,y:t.clientY-this.currentPan.y}}onTouchMove(e){if(!this.isDragging||e.touches.length!==1)return;e.preventDefault();let t=e.touches[0];this.currentPan={x:t.clientX-this.startPan.x,y:t.clientY-this.startPan.y},this.updateTransform()}onTouchEnd(){this.isDragging=!1}zoom(e){let t=Math.min(Math.max(this.scale+e,this.MIN_SCALE),this.MAX_SCALE),n=this.content.getBoundingClientRect(),o=n.width/2,r=n.height/2,i=t-this.scale;this.currentPan.x-=o*i,this.currentPan.y-=r*i,this.scale=t,this.updateTransform()}updateTransform(){this.content.style.transform=`translate(${this.currentPan.x}px, ${this.currentPan.y}px) scale(${this.scale})`}resetTransform(){let t=this.content.querySelector("svg").getBoundingClientRect(),n=t.width/this.scale,o=t.height/this.scale;this.scale=1,this.currentPan={x:(this.container.clientWidth-n)/2,y:(this.container.clientHeight-o)/2},this.updateTransform()}},T=["--secondary","--tertiary","--gray","--light","--lightgray","--highlight","--dark","--darkgray","--codeFont"],y;document.addEventListener("nav",async()=>{let e=document.querySelector(".center").querySelectorAll("code.mermaid");if(e.length===0)return;y||=await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.esm.min.mjs");let t=y.default,n=new WeakMap;for(let r of e)n.set(r,r.innerText);async function o(){for(let s of e){s.removeAttribute("data-processed");let c=n.get(s);c&&(s.innerHTML=c)}let r=T.reduce((s,c)=>(s[c]=window.getComputedStyle(document.documentElement).getPropertyValue(c),s),{}),i=document.documentElement.getAttribute("saved-theme")==="dark";t.initialize({startOnLoad:!1,securityLevel:"loose",theme:i?"dark":"base",themeVariables:{fontFamily:r["--codeFont"],primaryColor:r["--light"],primaryTextColor:r["--darkgray"],primaryBorderColor:r["--tertiary"],lineColor:r["--darkgray"],secondaryColor:r["--secondary"],tertiaryColor:r["--tertiary"],clusterBkg:r["--light"],edgeLabelBackground:r["--highlight"]}}),await t.run({nodes:e})}await o(),document.addEventListener("themechange",o),window.addCleanup(()=>document.removeEventListener("themechange",o));for(let r=0;r<e.length;r++){let v=function(){let g=l.querySelector("#mermaid-space"),h=l.querySelector(".mermaid-content");if(!h)return;f(h);let w=i.querySelector("svg").cloneNode(!0);h.appendChild(w),l.classList.add("active"),g.style.cursor="grab",u=new m(g,h)},M=function(){l.classList.remove("active"),u?.cleanup(),u=null},i=e[r],s=i.parentElement,c=s.querySelector(".clipboard-button"),d=s.querySelector(".expand-button"),p=window.getComputedStyle(c),L=c.offsetWidth+parseFloat(p.marginLeft||"0")+parseFloat(p.marginRight||"0");d.style.right=`calc(${L}px + 0.3rem)`,s.prepend(d);let l=s.querySelector("#mermaid-container");if(!l)return;let u=null;d.addEventListener("click",v),E(l,M),window.addCleanup(()=>{u?.cleanup(),d.removeEventListener("click",v)})}});
+</script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/copy-tex.min.js" type="application/javascript" data-persist="true"></script><script src="../../../postscript.js" type="module" data-persist="true"></script></html>

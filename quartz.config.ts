@@ -11,7 +11,7 @@ const config: QuartzConfig = {
     pageTitlePrefix: "... ",
     pageTitle: "🐏 wsg.net",
     pageTitleSuffix: "",
-    enableSPA: true,
+    enableSPA: false,
     enablePopovers: true,
     analytics: null,
     locale: "en-US",
